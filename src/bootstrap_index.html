@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Calculator used to determine the power requirements of a digital LED strip">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+<title>LED Power Calculator</title>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="d-flex justify-content-center">
+  <h1 class="">Addressable LED Strip Power Calculator</h1>
+</div><br>
+<div class="col-8">
+  <p>This calculator will take your total number of LED's and selected voltage and calculate the TOTAL and AVERAGE
+    amperage and wattage required.
+  </p>
+</div><br>
+<!-- <div class="d-flex justify-content-center"> -->
+  <form>
+    <div class="row g-2 mb-3">
+      <div class="col-sm">
+        <label for="ledCount" class="form-label mb-0">Number of LED's:</label>
+        <div id="ledHelp" class="form-text">Enter the total number of LED's here.</div>
+      </div>
+      <div class="col-sm input-group">
+        <input type="number" class="form-control" id="ledCount" min="1">
+        <span class="input-group-text px-2">LED's</span>
+      </div>
+    </div>
+    <div class="row g-2 mb-3">
+      <div class="input-group col-sm">
+        <label for="voltage" class="input-group-text px-1">Voltage:</label>
+        <select class="form-select" id="voltage" onchange="setV()">
+          <option value="5">5v</option>
+          <option value="12">12v</option>
+        </select>
+      </div>
+      <div class="input-group col-sm">
+        <label for="5vled" class="input-group-text px-1">LED Type:</label>
+        <select class="form-select" id="5vled">
+          <option value="2812">WS2812b</option>
+          <option value="2812eco">WS2812b-Eco</option>
+          <option value="102">APA102</option>
+          <option value="6812">SK6812</option>
+        </select>
+        <select class="form-select" id="12vled" style="display: none;">
+          <option value="2815">WS2815</option>
+          <option value="btf2815">BTF2815</option>
+          <option value="8208">GS8208</option>
+          <option value="6821">SK6812</option>
+        </select>
+      </div>
+    </div>
+    <div class="row g-2 mb-3">
+      <div class="col-6">
+        <div class="btn btn-secondary w-100" onclick="clearForm()">Clear Form</div>
+      </div>
+      <div class="col-6">
+        <div class="btn btn-primary w-100" type="submit" onclick="calculate()">Calculate</div>
+      </div>
+    </div>
+    <div class="row g-2 mb-3">
+      <div class="col-sm">
+        <label for="amps" class="form-label">Total Amperage:</label>
+        <input type="number" class="form-control" id="amps" placeholder="Calculated Amperage" readonly>
+      </div>
+      <div class="col-sm">
+        <label for="watts" class="form-label">Total Wattage:</label>
+        <input type="number" class="form-control" id="watts" placeholder="Calculated Wattage" readonly>
+      </div>
+    </div>
+  </form>
+<!-- </div> -->
+<script src="./js/index.js"></script>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>
