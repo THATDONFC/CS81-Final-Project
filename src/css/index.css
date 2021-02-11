@@ -1,0 +1,219 @@
+/* CSS Document */
+
+body {
+	font-family: "Lucida Grande", Helvetica, sans-serif;
+	margin: 20px auto;
+  /* max-width: 500px; */
+}
+
+form > div {
+  margin-bottom: 20px;
+}
+
+select {
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.select-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.select-wrapper select,
+.select-wrapper label {
+	display: inline;
+	vertical-align: top;
+}
+
+.select-wrapper::after {
+  content: "▼";
+  font-size: 1rem;
+  top: 6px;
+  right: 10px;
+  position: absolute;
+}
+
+button, input, select, label {
+	display: inline-block;
+	font-family: inherit;
+	font-size: 100%;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 5px;
+	height: 30px;
+}
+
+input[type="text"], input[type="number"], select {
+  box-shadow: inset 1px 1px 3px #ccc;
+  border-radius: 5px;
+}
+
+/*
+  html5doctor.com Reset Stylesheet
+  v1.6.1
+  Last Updated: 2010-09-17
+  Author: Richard Clark - http://richclarkdesign.com
+  Twitter: @rich_clark
+*/
+
+/* For non-retina based devices that have a smaller screen */
+/* @media only screen and (min-width: 320px) {
+
+} */
+
+/* Retina enabled devices with smaller screen */
+/* @media  only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 320px),
+only screen and ( -o-min-device-pixel-ratio: 2/1) and (min-width: 320px),
+only screen and ( min-device-pixel-ratio: 2) and (min-width: 320px),
+only screen and ( min-resolution: 192dpi) and (min-width: 320px),
+only screen and ( min-resolution: 2dppx) and (min-width: 320px) {
+
+} */
+
+/*Non- retina based devices with medium screen size */
+/* @media only screen and (min-width: 768px) {
+
+} */
+
+/* Retina devices with medium screen size */
+/* @media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px),
+only screen and ( -o-min-device-pixel-ratio: 2/1) and (min-width: 768px),
+only screen and ( min-device-pixel-ratio: 2) and (min-width: 768px),
+only screen and ( min-resolution: 192dpi) and (min-width: 768px),
+only screen and ( min-resolution: 2dppx) and (min-width: 768px) {
+
+} */
+
+/* Non-retina devices with large screen sizes */
+/* @media only screen and (min-width: 1200px) {
+
+} */
+
+/* Retina devices with large screen sizes */
+/* @media  only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 1200px),
+only screen and ( -o-min-device-pixel-ratio: 2/1) and (min-width: 1200px),
+only screen and ( min-device-pixel-ratio: 2) and (min-width: 1200px),
+only screen and ( min-resolution: 192dpi) and (min-width: 1200px),
+only screen and ( min-resolution: 2dppx) and (min-width: 1200px) {
+
+} */
+
+/* html, body, div, span, object, iframe,  h1, h2, h3, h4, h5, h6, p, blockquote, pre,  abbr, address, cite, code,  del, dfn, em, img, ins, kbd, q, samp,  small, strong, sub, sup, var,  b, i,  dl, dt, dd, ol, ul, li,  fieldset, form, label, legend,  table, caption, tbody, tfoot, thead, tr, th, td,  article, aside, canvas, details, figcaption, figure,  footer, header, hgroup, menu, nav, section, summary,  time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+
+
+article, aside, details, figcaption, figure,  footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+nav ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,  q:before, q:after {
+	content: '';
+	content: none;
+}
+
+a {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+} */
+
+/* change colours to suit your needs */
+/* ins {
+	background-color: #ff9;
+	color: #000;
+	text-decoration: none;
+} */
+
+/* change colours to suit your needs */
+/* mark {
+	background-color: #ff9;
+	color: #000;
+	font-style: italic;
+	font-weight: bold;
+}
+
+del {
+	text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+	border-bottom: 1px dotted;
+	cursor: help;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+} */
+
+/* change border colour to suit your needs */
+/* hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #cccccc;
+	margin: 1em 0;
+	padding: 0;
+}
+
+input, select {
+	vertical-align: middle;
+}
+
+input[type=text], textarea {
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	transition: all 0.30s ease-in-out;
+	padding: 3px 0 3px 3px;
+	margin: 5px 1px 3px 0;
+	border: 1px solid #DDDDDD;
+}
+
+input[type=text]:focus, textarea:focus {
+	box-shadow: 0 0 5px #51CBEE;
+	outline: none;
+	padding: 3px 0 3px 3px;
+	margin: 5px 1px 3px 0;
+	border: 1px solid #51CBEE;
+} */
+
+/* #container {
+    width: 800px;
+    Change this value to customize the content area
+    margin: 0 auto;
+} */
+
+/* a[href],
+input[type='submit'],
+input[type='image'],
+label[for],
+select,
+button,
+.pointer {
+    cursor: pointer;
+}
+
+.clear {
+} */
+

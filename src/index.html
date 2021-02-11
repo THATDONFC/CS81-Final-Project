@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Calculator used to determine the power requirements of a digital LED strip">
+<title>LED Power Calculator</title>
+<link href="css/index.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<h1>Addressable LED Strip Power Calculator</h1><br>
+<form id="led_form" name="Lf" method="post">
+  <div>
+    <label for="ledcount">Number of LED's:</label>
+    <input type="number" id="ledcount" name="ledcount" min="1" placeholder="Total number of LED's" required autofocus />
+  </div>
+  <div class="select-wrapper">
+    <label for="voltage">Voltage:</label>
+    <select id="voltage" name="voltage" onchange="setV()">
+      <option value="5">5v</option>
+      <option value="12">12v</option>
+    </select>
+  </div>
+  <div id="ledtype" class="select-wrapper">
+    <label for="5vled">LED Type:</label>
+    <select id="5vled" name="5vled" class="strip" required>
+      <option value="2812">WS2812b</option>
+      <option value="2812eco">WS2812b-Eco</option>
+      <option value="102">APA102</option>
+      <option value="6812">SK6812</option>
+    </select>
+    <select id="12vled" name="12vled" class="strip" required style="display: none;">
+      <option value="2815">WS2815</option>
+      <option value="btf2815">BTF2815</option>
+      <option value="8208">GS8208</option>
+      <option value="6821">SK6812</option>
+    </select>
+  </div>
+  <div>
+    <h4>Drop Down Menu</h4>
+    <label for="subject">Subject:</label>
+    <select id="subject" name="subject">
+      <option value="hello">Subject 1</option>
+      <option value="quote">Subject 2</option>
+      <option value="general">Subject 3</option>
+    </select>
+  </div>
+  <div>
+    <h4>Text Area</h4>
+    <label for="message">Message: <span class="required">*</span> </label>
+    <textarea id="message" name="message" placeholder="Write your message here." required ></textarea>
+  </div>
+  <div>
+    <h4>Radio Buttons</h4>
+    <label for="radio-choice-1">Choice 1</label>
+    <input type="radio" name="radio-choice" id="radio-choice-1" tabindex="2" value="choice-1">
+    <label for="radio-choice-2">Choice 2</label>
+    <input type="radio" name="radio-choice" id="radio-choice-2" tabindex="3" value="choice-2">
+  </div>
+  <div>
+    <h4>Check Boxes</h4>
+    <label for="checkbox1">Choice 1:</label>
+    <input type="checkbox" name="checkbox1" id="checkbox1">
+    <label for="checkbox2">Choice 2:</label>
+    <input type="checkbox" name="checkbox2" id="checkbox2">
+  </div>
+  <div>
+    <button type="button" id="submit" onclick="calculate()">Calculate</button>
+    <button type="button" id="clear" onclick="clearForm()">Clear</button>
+  </div>
+</form>
+<script src="./js/index.js"></script>
+</body>
+</html>
