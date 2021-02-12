@@ -5,71 +5,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Calculator used to determine the power requirements of a digital LED strip">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 <title>LED Power Calculator</title>
-<link href="css/index.css" rel="stylesheet" type="text/css">
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<h1>Addressable LED Strip Power Calculator</h1><br>
-<form id="led_form" name="Lf" method="post">
-  <div>
-    <label for="ledcount">Number of LED's:</label>
-    <input type="number" id="ledcount" name="ledcount" min="1" placeholder="Total number of LED's" required autofocus />
+<!-- BEGIN Main div container - content -->
+<div class="container-fluid gx-md-5">
+  <!-- ROW holds page heading -->
+  <div class="row px-2">
+    <h1 class="">Addressable LED Strip Power Calculator</h1>
+    <span class="themeSelect">
+      <button type="button" class="btn btn-secondary">
+        <i class="bi bi-moon"></i><span class="visually-hidden">Button</span></button></span>
   </div>
-  <div class="select-wrapper">
-    <label for="voltage">Voltage:</label>
-    <select id="voltage" name="voltage" onchange="setV()">
-      <option value="5">5v</option>
-      <option value="12">12v</option>
-    </select>
+  <!-- ROW holds app description and instructions -->
+  <div class="row px-2">
+    <div class="col-md-8 col-sm-9">
+      <p>This calculator will take your total number of LED's and selected voltage and calculate the TOTAL and AVERAGE
+        amperage and wattage required.
+      </p>
+    </div>
   </div>
-  <div id="ledtype" class="select-wrapper">
-    <label for="5vled">LED Type:</label>
-    <select id="5vled" name="5vled" class="strip" required>
-      <option value="2812">WS2812b</option>
-      <option value="2812eco">WS2812b-Eco</option>
-      <option value="102">APA102</option>
-      <option value="6812">SK6812</option>
-    </select>
-    <select id="12vled" name="12vled" class="strip" required style="display: none;">
-      <option value="2815">WS2815</option>
-      <option value="btf2815">BTF2815</option>
-      <option value="8208">GS8208</option>
-      <option value="6821">SK6812</option>
-    </select>
+  <!-- BEGIN MAIN FORM - calculator form -->
+  <form class="main-form">
+    <!-- ROW holds LED COUNT and INPUT -->
+    <div class="row px-2 mb-3">
+      <div class="col-sm">
+        <label for="ledCount" class="form-label mb-0">Number of LED's:</label>
+        <div id="ledHelp" class="form-text">Enter the total number of LED's here.</div>
+      </div>
+      <div class="input-group col-sm">
+        <input type="number" class="form-control" id="ledCount" min="1">
+        <span class="input-group-text px-2">LED's</span>
+      </div>
+    </div>
+    <!-- ROW holds voltage SELECTion and ledtype SELECTion -->
+    <div class="row px-2 mb-3">
+      <div class="input-group col-sm mb-3">
+        <label for="voltage" class="input-group-text px-1">Voltage:</label>
+        <select class="form-select" id="voltage" onchange="setV()">
+          <option value="5">5v</option>
+          <option value="12">12v</option>
+        </select>
+      </div>
+      <!-- Show 5vled if 5v selected, 12vled if not selected -->
+      <div class="input-group col-sm mb-3">
+        <label for="5vled" class="input-group-text px-1">LED Type:</label>
+        <select class="form-select" id="5vled">
+          <option value="2812">WS2812b</option>
+          <option value="2812eco">WS2812b-Eco</option>
+          <option value="102">APA102</option>
+          <option value="6812">SK6812</option>
+        </select>
+        <select class="form-select" id="12vled" style="display: none;">
+          <option value="2815">WS2815</option>
+          <option value="btf2815">BTF2815</option>
+          <option value="8208">GS8208</option>
+          <option value="6821">SK6812</option>
+        </select>
+      </div>
+    </div>
+    <!-- ROW holds form SUBMIT and CLEAR BUTTONs -->
+    <div class="row px-2 mb-2">
+      <div class="col-6">
+        <div class="btn btn-secondary w-100" onclick="clearForm()">Clear Form</div>
+      </div>
+      <div class="col-6">
+        <div class="btn btn-primary w-100" type="submit" onclick="calculate()">Calculate</div>
+      </div>
+    </div>
+  </form>
+  <!-- END MAIN FORM -->
+  <!-- ROW holds average and total amperage and wattage -->
+  <div class="row px-2 mb-3">
+    <!-- COL holds average amperage and wattage -->
+    <div class="col-sm-6">
+      <h5>Average:</h5>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-floating input-group">
+            <input type="input" class="form-control text-truncate" id="ampsA" placeholder="Average Amperage" value="Average Amperage" readonly>
+            <label for="ampsA">Amperage</label>
+            <span class="input-group-text">A</span>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-floating input-group">
+            <input type="input" class="form-control text-truncate" id="wattsA" placeholder="Average Wattage" value="Average Wattage" readonly>
+            <label for="ampsA">Wattage</label>
+            <span class="input-group-text">W</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- COL holds total amperage and wattage -->
+    <div class="col-sm-6">
+      <h5>Maximum:</h5>
+      <div class="row">
+        <div class="col-6 mb-3">
+          <div class="form-floating input-group">
+            <input type="input" class="form-control text-truncate" id="ampsM" placeholder="Maximum Amperage" value="Maximum Amperage" readonly>
+            <label for="ampsM">Amperage</label>
+            <span class="input-group-text">A</span>
+          </div>
+        </div>
+        <div class="col-6 mb-3">
+          <div class="form-floating input-group">
+            <input type="input" class="form-control text-truncate" id="wattsM" placeholder="Maximum Wattage" value="Maximum Wattage" readonly>
+            <label for="ampsM">Wattage</label>
+            <span class="input-group-text">W</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div>
-    <h4>Drop Down Menu</h4>
-    <label for="subject">Subject:</label>
-    <select id="subject" name="subject">
-      <option value="hello">Subject 1</option>
-      <option value="quote">Subject 2</option>
-      <option value="general">Subject 3</option>
-    </select>
+  <!-- ROW holds recommended power supply -->
+  <div class="row px-2 mb-3">
+    <label for="powerSupply" class="col-md-5 h5">Recommended Power Supply:</label>
+    <span class="col input-group">
+      <input type="input" class="form-control" id="powerSupply" placeholder="" value="" readonly>
+      <span class="input-group-text">@</span>
+      <input type="input" class="form-control" id="powerSupply" placeholder="" value="" readonly>
+      <span class="input-group-text"></span>
+      <input type="input" class="form-control" id="powerSupply" placeholder="" value="" readonly>
+    </span>
+
   </div>
-  <div>
-    <h4>Text Area</h4>
-    <label for="message">Message: <span class="required">*</span> </label>
-    <textarea id="message" name="message" placeholder="Write your message here." required ></textarea>
+  <!-- ROW holdspower injections -->
+  <div class="row px-2 mb-3">
+
   </div>
-  <div>
-    <h4>Radio Buttons</h4>
-    <label for="radio-choice-1">Choice 1</label>
-    <input type="radio" name="radio-choice" id="radio-choice-1" tabindex="2" value="choice-1">
-    <label for="radio-choice-2">Choice 2</label>
-    <input type="radio" name="radio-choice" id="radio-choice-2" tabindex="3" value="choice-2">
+  <!-- ROW holds wire gauge -->
+  <div class="row px-2 mb-3">
+
   </div>
-  <div>
-    <h4>Check Boxes</h4>
-    <label for="checkbox1">Choice 1:</label>
-    <input type="checkbox" name="checkbox1" id="checkbox1">
-    <label for="checkbox2">Choice 2:</label>
-    <input type="checkbox" name="checkbox2" id="checkbox2">
+  <!-- ROW holds disclaimer -->
+  <div class="row px-2 mb-3">
+
   </div>
-  <div>
-    <button type="button" id="submit" onclick="calculate()">Calculate</button>
-    <button type="button" id="clear" onclick="clearForm()">Clear</button>
-  </div>
-</form>
-<script src="./js/index.js"></script>
+</div>
+<!-- END Main div container - content -->
+<!-- Source custom JavaScript from js/index.js -->
+<script src="js/index.js"></script>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </body>
 </html>

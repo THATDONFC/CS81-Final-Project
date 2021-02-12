@@ -1,17 +1,31 @@
- /* Class */
+/* Class */
 
-body {
-  max-width: 700px;
+/* body {
+  max-width: 75em;
   margin: 20px auto;
-}
+} */
 
 /* form {
   margin-left: 20px;
 } */
+
+
 
 .show-inline {
   display: inline !important;
 }
 .hide {
   display: none !important;
+}
+
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #fff;
+}
+
+.bi {
+  font-size: 1.5em;
+  vertical-align: .1em;
 }
