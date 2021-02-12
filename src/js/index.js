@@ -16,6 +16,15 @@ function setV() {
   d.getElementById('12vled').style.display = (v.value === "5") ? "none":"inline";
 }
 
+function setup() {
+  setPI();
+}
+
+function setPI() {
+  const basePI = ("10");
+  d.getElementById("powerInjection").innerHTML = basePI;
+}
+
 // v.addEventListener("blur", f => {
 //   fiveVolt = (v.value == "5");
 //   d.getElementById('5vled').style.display = fiveVolt ? "inline":"none";
