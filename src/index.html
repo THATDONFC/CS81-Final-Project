@@ -38,7 +38,7 @@
         <div id="ledHelp" class="form-text d-none d-sm-block">Enter the total number of LED's here.</div>
       </div>
       <div class="input-group col-sm p-2">
-        <input type="number" class="form-control" id="ledCount" min="1" max="10000" oninput="setLed()" required>
+        <input type="number" class="form-control" id="ledCount" min="1" max="10000" oninput="setLed()" required autofocus>
         <span class="input-group-text px-2">LED's</span>
       </div>
     </div>
@@ -71,7 +71,7 @@
     <!-- ROW holds form SUBMIT and CLEAR BUTTONs -->
     <div class="row gx-4 mb-2">
       <div class="d-grid col-sm-6 p-2 order-last order-sm-first">
-        <button class="btn btn-secondary" id="clear">Clear Form</button>
+        <button class="btn btn-secondary" type="button" id="clear">Clear Form</button>
       </div>
       <div class="d-grid col-sm-6 p-2">
         <button class="btn btn-primary" type="submit" id="calculate">Calculate</button>
@@ -87,14 +87,14 @@
       <div class="row">
         <div class="col-6">
           <div class="form-floating input-group">
-            <input type="input" class="form-control text-truncate" id="ampsA" placeholder="Average Amperage" value="Average Amperage" readonly>
+            <input type="input" class="form-control text-truncate" id="ampsA" placeholder="Average Amperage" value="Average Amperage" disabled>
             <label for="ampsA">Amperage</label>
             <span class="input-group-text">A</span>
           </div>
         </div>
         <div class="col-6">
           <div class="form-floating input-group">
-            <input type="input" class="form-control text-truncate" id="wattsA" placeholder="Average Wattage" value="Average Wattage" readonly>
+            <input type="input" class="form-control text-truncate" id="wattsA" placeholder="Average Wattage" value="Average Wattage" disabled>
             <label for="ampsA">Wattage</label>
             <span class="input-group-text">W</span>
           </div>
@@ -107,7 +107,7 @@
       <div class="row">
         <div class="col-6">
           <div class="form-floating input-group">
-            <input type="input" class="form-control text-truncate" id="ampsM" placeholder="Maximum Amperage" value="Maximum Amperage" readonly>
+            <input type="input" class="form-control text-truncate" id="ampsM" placeholder="Maximum Amperage" value="Maximum Amperage" disabled>
             <label for="ampsM">Amperage</label>
             <span class="input-group-text">A</span>
           </div>
@@ -129,10 +129,10 @@
       <p class="h5 text-nowrap">Recommended Power Supply:</p>
       <div class="row gx-4">
         <div class="col-sm h7">
-          <span id="cVolt"></span>
+          <span id="psVolt"></span>
           <span >@</span>
-          <span id="cAmp"></span>
-          <span id="cWatt"></span>
+          <span id="psAmp"></span>
+          <span id="psWatt"></span>
         </div>
       </div>
     </div>

@@ -2,13 +2,23 @@
 'use strict';
 // Constant declarations
 const d = document;
+// ElementId constants
+// Form input elements
 const form = d.getElementById("main-form")
 const count = d.getElementById("ledCount");
 const v = d.getElementById("voltage");
-const five = d.getElementById("5vled");
-const twelve = d.getElementById("12vled");
+const led5vForm = d.getElementById("5vled");
+const led12vForm = d.getElementById("12vled");
 const calcButton = d.getElementById("calculate");
 const clearButton = d.getElementById("clear");
+// Form output elements
+const avgAmpForm = d.getElementById("ampsA");
+const avgWattForm = d.getElementById("wattsA");
+const maxAmpForm = d.getElementById("ampsM");
+const maxWattForm = d.getElementById("wattsM");
+const psVolt = d.getElementById("psVolt");
+const psAmp = d.getElementById("psAmp");
+const psWatt = d.getElementById("psWatt");
 
 // Variable declarations
 var ledCount = 0;
@@ -21,56 +31,37 @@ var selectedV;
 // Error handling
 class InputError extends Error {}
 
-// Called on body load to initialize the form
+/**
+ * Called on body load to initialize the form
+ *
+ */
 function setup() {
   setV();setPI();setPS();submitted=false;
-  if (submitted) {
-    calcButton.disabled = true;
-    clearButton.disabled = false;
-  } else {
-    calcButton.disabled = false;
-    clearButton.disabled = true;
-  }
+  enCalc(false);enClear(false);
 }
-
-// Called on "CLEAR" clicked, resets form and text values
-function clearForm() {
-  setPI();setPS();form.reset();submitted=false;
-  calcButton.disabled = false;
-  clearButton.disabled = true;
-}
-
-clearButton.addEventListener("click", event => {
-  clearForm();
-})
 
 // Set Voltage functions selects 5V or 12V based on input from user
 function setV() {
   is5volt = (v.value === "5");
-  stripType = (is5volt) ? five.value : twelve.value;
-  d.getElementById('5vled').style.display = (is5volt) ? "inline":"none";
-  d.getElementById('12vled').style.display = (is5volt) ? "none":"inline";
+  stripType = (is5volt) ? led5vForm.value : led12vForm.value;
+  led5vForm.style.display = (is5volt) ? "inline":"none";
+  led12vForm.style.display = (is5volt) ? "none":"inline";
   selectedV = v.value;
 }
 
-// Called on "SUBMIT" clicked - calculates max and avg power
-//   and prints the values to the screen. Suggests a power supply
-//   and power injection points.
+/**
+ * Called on form.submit - calculates max and avg power
+ *   and prints the values to the screen. Suggests a power supply
+ *   and power injection points.
+ */
 function submitForm() {
   calculate(ledCount, v.value, stripType);
-  let recA = Math.round(((maxAmp / 2) + ((maxAmp / 2) * 0.20))); // recommended PS amperage
-  let recW = Math.round(((maxWatt / 2) + ((maxWatt / 2) * 0.20))); // recommended PS wattage (V*A)=W
-  d.getElementById("ampsA").value = avgAmp;
-  d.getElementById("ampsM").value = maxAmp;
-  d.getElementById("wattsA").value = avgWatt;
-  d.getElementById("wattsM").value = maxWatt;
-  setPS(selectedV, recA, recW, false);
-  // d.getElementById("cVolt").innerHTML = (`${v.value}V`); // selected voltage from form
-  // d.getElementById("cAmp").innerHTML = (`${recA}A`);
-  // d.getElementById("cWatt").innerHTML = (`(${recW}W)`);
+  avgAmpForm.value = avgAmp;
+  maxAmpForm.value = maxAmp;
+  avgWattForm.value = avgWatt;
+  maxWattForm.value = maxWatt;
+  setPS(selectedV, maxAmp, maxWatt, false);
   submitted = true;
-  calcButton.disabled = true;
-  clearButton.disabled = false;
   avgAmp=0;maxAmp=0;avgWatt=0;maxWatt=0;
 }
 
@@ -78,7 +69,45 @@ function submitForm() {
 form.addEventListener("submit", event => {
   submitForm();
   event.preventDefault();
-})
+});
+
+// Called on "CLEAR" clicked, resets form and text values
+function clearForm() {
+  setPI();setPS();form.reset();submitted=false;
+  avgAmpForm.value = avgAmpForm.defaultValue;
+  avgWattForm.value = avgWattForm.defaultValue;
+  maxAmpForm.value = maxAmpForm.defaultValue;
+  maxWattForm.value = maxWattForm.defaultValue;
+}
+
+clearButton.addEventListener("click", () => {
+  clearForm();
+  enButtons(false);
+});
+
+/**
+ * Set Power Supply values based on the state of init and prints them to the screen
+ * @param volt int representing strip voltage - selected by the user
+ * @param amp  float representing MAXimum required AMPS
+ * @param watt float representing MAXimum required WATTS
+ * @param init bool determines if values should be initialized
+ */
+function setPS(volt, amp, watt, init = true) {
+  const baseVolt = ("Example: 5V");
+  const baseAmp = ("10A");
+  const baseWatt = ("(50W)");
+  if (init) {
+    psVolt.innerHTML = baseVolt;
+    psAmp.innerHTML = baseAmp;
+    psWatt.innerHTML = baseWatt;
+  } else {
+    let recA = Math.round(((amp / 2) + ((amp / 2) * 0.20))); // recommended PS amperage
+    let recW = Math.round(((watt / 2) + ((watt / 2) * 0.20))); // recommended PS wattage (V*A)=W
+    psVolt.innerHTML = (`${volt}V`);
+    psAmp.innerHTML = (`${recA}A`);
+    psWatt.innerHTML = (`${recW}W`);
+  }
+}
 
 // Set initial Power Injection values
 function setPI() {
@@ -86,23 +115,17 @@ function setPI() {
   d.getElementById("powerInjection").innerHTML = basePI;
 }
 
-// Set initial Power Supply values
-function setPS(volt, amp, watt, init = true) {
-  const baseVolt = ("Example: 5V");
-  const baseAmp = ("10A");
-  const baseWatt = ("(50W)");
-  d.getElementById("cVolt").innerHTML = (init) ? baseVolt: (`${volt}V`);
-  d.getElementById("cAmp").innerHTML = (init) ? baseAmp: (`${amp}A`);
-  d.getElementById("cWatt").innerHTML = (init) ? baseWatt: (`${watt}W`);
-}
-
 // set the variable ledCount to the value entered by the user
 function setLed() {
-  if (count.value.length < 1) return;
+  if (count.value.length < 1) {
+    enCalc(false);
+    return;
+  }
   try {
     let isNumber = !isNaN(parseInt(count.value)); // check if input is a number
     if (isNumber) {
       ledCount = parseInt(count.value); // change the string to int
+      enButtons(true);
     } else {
       throw new InputError(count.value + " is not a number!"); // input is not a number
     }
@@ -123,7 +146,15 @@ count.addEventListener("keydown", event => {
   }
 });
 
-// Calculations from ledCount, voltage, type
+// count.addEventListener("input", handleChange());
+
+/**
+ * Calculates the MAX and AVG values of AMPS and WATTS
+ * Converts result to floating point Number with a precision of 2
+ * @param {int} lc int representing total number of led's
+ * @param {int} v  int representing the voltage selected by the user
+ * @param {int} t  int representing the type of strip selected by the user
+ */
 function calculate(lc, v, t) {
   let strip = (v==5) ? strip5v : strip12v;
   let type = parseInt(t);
@@ -139,24 +170,42 @@ function calculate(lc, v, t) {
   console.log(`avgAmp ${avgAmp}`);
   console.log(`maxWatt ${maxWatt}`);
   console.log(`avgWatt ${avgWatt}`);
+  enCalc(false);
 }
 
-function handleChange() {
-  let oldVolt = v.value;
-  let olsStrip = (is5volt) ? five.value : twelve.value;
-}
-
-// Enable/Disable the calculate button - enabled by default
-function enCalc(input = true) {
-  if (!input) {
-    calcButton.disabled = true;
+// Enables all buttons if select tags change and ledCount is not empty
+function selectChange(e) {
+  if (count.value.length > 1) {
+    if (e.target.nodeName == "SELECT") {
+      enButtons(true);
+    }
   }
 }
 
+form.addEventListener("change", e => {
+  selectChange(e);
+});
+
+// Enable/Disable the calculate button - disabled by default
+function enCalc(input = true) {
+  calcButton.disabled = !input;
+}
+
 // Enable/Disable the clear button - disabled by default
-function enClear (input = false) {
-  if (input) {
-    clearButton.disabled = true;
+function enClear (input = true) {
+  clearButton.disabled = !input;
+}
+
+// Enable/Disable all buttons
+function enButtons (input = true) {
+  enClear(input);
+  enCalc(input);
+}
+
+function testForm() {
+  var i;
+  for (i = 0; i < form.length; i++) {
+    console.log(form.elements[i].id);
   }
 }
 
