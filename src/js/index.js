@@ -16,6 +16,7 @@ var is5volt;
 var stripType;
 var maxAmp, avgAmp, maxWatt, avgWatt;
 var submitted;
+var selectedV;
 
 // Error handling
 class InputError extends Error {}
@@ -49,6 +50,7 @@ function setV() {
   stripType = (is5volt) ? five.value : twelve.value;
   d.getElementById('5vled').style.display = (is5volt) ? "inline":"none";
   d.getElementById('12vled').style.display = (is5volt) ? "none":"inline";
+  selectedV = v.value;
 }
 
 // Called on "SUBMIT" clicked - calculates max and avg power
@@ -62,9 +64,10 @@ function submitForm() {
   d.getElementById("ampsM").value = maxAmp;
   d.getElementById("wattsA").value = avgWatt;
   d.getElementById("wattsM").value = maxWatt;
-  d.getElementById("cVolt").innerHTML = (`${v.value}V`); // selected voltage from form
-  d.getElementById("cAmp").innerHTML = (`${recA}A`);
-  d.getElementById("cWatt").innerHTML = (`(${recW}W)`);
+  setPS(selectedV, recA, recW, false);
+  // d.getElementById("cVolt").innerHTML = (`${v.value}V`); // selected voltage from form
+  // d.getElementById("cAmp").innerHTML = (`${recA}A`);
+  // d.getElementById("cWatt").innerHTML = (`(${recW}W)`);
   submitted = true;
   calcButton.disabled = true;
   clearButton.disabled = false;
@@ -84,13 +87,13 @@ function setPI() {
 }
 
 // Set initial Power Supply values
-function setPS() {
-  const baseVolt = ("5V");
+function setPS(volt, amp, watt, init = true) {
+  const baseVolt = ("Example: 5V");
   const baseAmp = ("10A");
-  const baseWatt = ("50W)");
-  d.getElementById("cVolt").innerHTML = baseVolt;
-  d.getElementById("cAmp").innerHTML = baseAmp;
-  d.getElementById("cWatt").innerHTML = baseWatt;
+  const baseWatt = ("(50W)");
+  d.getElementById("cVolt").innerHTML = (init) ? baseVolt: (`${volt}V`);
+  d.getElementById("cAmp").innerHTML = (init) ? baseAmp: (`${amp}A`);
+  d.getElementById("cWatt").innerHTML = (init) ? baseWatt: (`${watt}W`);
 }
 
 // set the variable ledCount to the value entered by the user
@@ -124,17 +127,38 @@ count.addEventListener("keydown", event => {
 function calculate(lc, v, t) {
   let strip = (v==5) ? strip5v : strip12v;
   let type = parseInt(t);
-  maxAmp = (lc * strip[type].maxP).toPrecision(2);
-  avgAmp = (lc * strip[type].avgP).toPrecision(2);
+  maxAmp = (lc * strip[type].maxP);
+  avgAmp = (lc * strip[type].avgP);
+  maxWatt = (maxAmp * v);
+  avgWatt = (avgAmp * v);
+  maxAmp = parseFloat((maxAmp.toFixed(2)));
+  avgAmp = parseFloat((avgAmp.toFixed(2)));
+  maxWatt = parseFloat((maxWatt.toFixed(2)));
+  avgWatt = parseFloat((avgWatt.toFixed(2)));
   console.log(`maxAmp ${maxAmp}`);
   console.log(`avgAmp ${avgAmp}`);
-  maxWatt = (maxAmp * v).toPrecision(2);
-  avgWatt = (avgAmp * v).toPrecision(2);
   console.log(`maxWatt ${maxWatt}`);
   console.log(`avgWatt ${avgWatt}`);
 }
 
+function handleChange() {
+  let oldVolt = v.value;
+  let olsStrip = (is5volt) ? five.value : twelve.value;
+}
 
+// Enable/Disable the calculate button - enabled by default
+function enCalc(input = true) {
+  if (!input) {
+    calcButton.disabled = true;
+  }
+}
+
+// Enable/Disable the clear button - disabled by default
+function enClear (input = false) {
+  if (input) {
+    clearButton.disabled = true;
+  }
+}
 
 // LED STRIP OBJECTS
 const strip5v = {
