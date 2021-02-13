@@ -9,7 +9,9 @@ body {
   margin-left: 20px;
 } */
 
-
+#main-card {
+  max-width: 1140px;
+}
 
 .show-inline {
   display: inline !important;
@@ -28,4 +30,9 @@ body {
 .bi {
   font-size: 1.5em;
   vertical-align: .1em;
+}
+
+html {
+  visibility: visible;
+  opacity: 1;
 }

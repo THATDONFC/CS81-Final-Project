@@ -31,16 +31,13 @@ var selectedV;
 // Error handling
 class InputError extends Error {}
 
-/**
- * Called on body load to initialize the form
- *
- */
+/** Called on body load to initialize the form */
 function setup() {
   setV();setPI();setPS();submitted=false;
   enCalc(false);enClear(false);
 }
 
-// Set Voltage functions selects 5V or 12V based on input from user
+/** Set Voltage functions selects 5V or 12V based on input from user */
 function setV() {
   is5volt = (v.value === "5");
   stripType = (is5volt) ? led5vForm.value : led12vForm.value;
@@ -71,13 +68,14 @@ form.addEventListener("submit", event => {
   event.preventDefault();
 });
 
-// Called on "CLEAR" clicked, resets form and text values
+/** Called on "CLEAR" clicked, resets form and text values */
 function clearForm() {
-  setPI();setPS();form.reset();submitted=false;
+  setPI();setPS();form.reset();
   avgAmpForm.value = avgAmpForm.defaultValue;
   avgWattForm.value = avgWattForm.defaultValue;
   maxAmpForm.value = maxAmpForm.defaultValue;
   maxWattForm.value = maxWattForm.defaultValue;
+  submitted=false;
 }
 
 clearButton.addEventListener("click", () => {
@@ -109,13 +107,13 @@ function setPS(volt, amp, watt, init = true) {
   }
 }
 
-// Set initial Power Injection values
+/** Set initial Power Injection values */
 function setPI() {
   const basePI = ("150");
   d.getElementById("powerInjection").innerHTML = basePI;
 }
 
-// set the variable ledCount to the value entered by the user
+/** Set the variable ledCount to the value entered by the user */
 function setLed() {
   if (count.value.length < 1) {
     enCalc(false);
@@ -138,7 +136,7 @@ function setLed() {
   }
 }
 
-// prevent ALL non-number values from being input
+/** prevent ALL non-number values from being input */
 count.addEventListener("keydown", event => {
   var invalidChars = ["-", "+", "e", "E", "."];
   if (invalidChars.includes(event.key)) {
@@ -146,14 +144,12 @@ count.addEventListener("keydown", event => {
   }
 });
 
-// count.addEventListener("input", handleChange());
-
 /**
  * Calculates the MAX and AVG values of AMPS and WATTS
  * Converts result to floating point Number with a precision of 2
- * @param {int} lc int representing total number of led's
- * @param {int} v  int representing the voltage selected by the user
- * @param {int} t  int representing the type of strip selected by the user
+ * @param lc int representing total number of led's
+ * @param v  int representing the voltage selected by the user
+ * @param t  int representing the type of strip selected by the user
  */
 function calculate(lc, v, t) {
   let strip = (v==5) ? strip5v : strip12v;
@@ -166,14 +162,10 @@ function calculate(lc, v, t) {
   avgAmp = parseFloat((avgAmp.toFixed(2)));
   maxWatt = parseFloat((maxWatt.toFixed(2)));
   avgWatt = parseFloat((avgWatt.toFixed(2)));
-  console.log(`maxAmp ${maxAmp}`);
-  console.log(`avgAmp ${avgAmp}`);
-  console.log(`maxWatt ${maxWatt}`);
-  console.log(`avgWatt ${avgWatt}`);
   enCalc(false);
 }
 
-// Enables all buttons if select tags change and ledCount is not empty
+/** Enables all buttons if select tags change and ledCount is not empty */
 function selectChange(e) {
   if (count.value.length > 1) {
     if (e.target.nodeName == "SELECT") {
@@ -186,17 +178,17 @@ form.addEventListener("change", e => {
   selectChange(e);
 });
 
-// Enable/Disable the calculate button - disabled by default
+/** Enable/Disable the calculate button - disabled by default */
 function enCalc(input = true) {
   calcButton.disabled = !input;
 }
 
-// Enable/Disable the clear button - disabled by default
+/** Enable/Disable the clear button - disabled by default */
 function enClear (input = true) {
   clearButton.disabled = !input;
 }
 
-// Enable/Disable all buttons
+/** Enable/Disable all buttons */
 function enButtons (input = true) {
   enClear(input);
   enCalc(input);
@@ -263,100 +255,3 @@ const strip12v = {
     avgP: 0.0100,
   }
 }
-
-
-// let i = 100;
-// let s = "Hello";
-
-// function hello(ok) {
-//   for (let i in ok) {
-//     let me = i;
-//     return me;
-//   }
-// }
-
-// class texting {
-
-// }
-
-// function checkForCharacters(inputString, checkString, startingIndex) {
-
-//   if (!startingIndex) {
-// 	  startingIndex = 0;
-//   }
-//   return inputString.indexOf(checkString);
-// }
-
-// function isNotaNumber (inputString) {
-//   return isNaN(inputString);
-// }
-
-// function isNumberInt(inputString) {
-
-//   return (!isNaN(parseInt(inputString))) ? true : false;
-// }
-
-// function stringToLowercase(inputString) {
-//   return inputString.toLowerCase();
-// }
-
-// function maxLength(inputString, inputLength) {
-
-//   return (inputString.length <= inputLength) ? true : false;
-// }
-
-// function minLength(inputString,inputLength) {
-//   return (inputString.length >= inputLength) ? true : false;
-// }
-
-// function stringToInteger (inputString) {
-//   return parseInt(inputString);
-// }
-
-// /* Returns viewport's width */
-// function getViewportWidth() {
-
-//     if (window.innerWidth) {
-//   /* Returns Window's width excluding toolbars/scrollbars */
-//         return window.innerWidth;
-//     } else if (document.body && document.body.offsetWidth) {
-//   /* Returns viewable width of document,
-//   including padding, border and scrollbar, but not the margin */
-//         return document.body.offsetWidth;
-//     } else {
-//         return 0;
-//     }
-// }
-
-// /* Returns window's height */
-// function getViewportHeight() {
-
-//     if (window.innerHeight) {
-//   /* Returns Window's height excluding toolbars/scrollbars */
-//         return window.innerHeight;
-//     } else if (document.body && document.body.offsetHeight) {
-//   /* Returns viewable height of document,
-//   including padding, border and scrollbar, but not the margin */
-//         return document.body.offsetHeight;
-//     } else {
-//         return 0;
-//     }
-// }
-
-// /* Returns screen's total height & width */
-// function getScreenResolution() {
-//  return {
-//   height: (screen.height)? screen.height : undefined,
-//   width: (screen.width)? screen.width : undefined
-//  };
-// }
-
-// /* Returns coordinates of the mouse pointer relative to the current window, for the given mouse event.
-//    Example, onclick="coords = getMouseCoordinates(event)" or onmousemove="coords = getMouseCoordinates(event)"
-// */
-// function getMouseCoordinates(event) {
-//     var x = (event.clientX)? event.clientX : undefined;
-//     var y = (event.clientY)? event.clientY : undefined;
-
-//  return { x: x, y: y };
-// }
