@@ -27,10 +27,6 @@
   </div>
   <!-- BEGIN MAIN FORM - calculator form -->
   <form method="index.html" action="#" id="main-form">
-    <!-- Not enough time to implement this functionality. I'll come back to this after the assignment is submitted -->
-    <div class="row gx-4 h-auto p-2" style="display: none;">
-      <input type="checkbox" class="d-flex">Check here if you would like to calculate by number of strips instead
-    </div>
     <!-- ROW holds LED COUNT and INPUT -->
     <div class="row gx-4">
       <div class="col-sm p-2">
@@ -40,30 +36,6 @@
       <div class="input-group col-sm p-2">
         <input type="number" class="form-control" id="ledCount" min="1" max="10000" oninput="setLed()" required autofocus>
         <span class="input-group-text px-2">LED's</span>
-      </div>
-    </div>
-    <!-- Not enough time to implement this functionality. I'll come back to this after the assignment is submitted -->
-    <!-- ROW holds stripCount and stripDensity -->
-    <div class="row gx-4" style="display: none;">
-      <div class="col-sm p-2">
-        <label for="stripCount" class="form-label mb-0">Number of Strips:</label>
-        <div id="stripHelp" class="form-text d-none d-sm-block">Enter the total number of 5 meter LED strips here.</div>
-      </div>
-      <div class="col-sm-6 p-2">
-        <div class="row">
-          <div class="col-6">
-          <div class="input-group">
-            <input type="number" class="form-control" id="stripCount" min="1" max="100" oninput="setStrip()" required>
-            <span class="input-group-text px-2">Strips</span>
-          </div>
-          </div>
-          <div class="col-6">
-          <div class="input-group">
-            <input type="number" class="form-control" id="stripDensity" min="1" max="100" oninput="setStrip()" required>
-            <span class="input-group-text px-2">LEDs/m</span>
-          </div>
-          </div>
-        </div>
       </div>
     </div>
     <!-- ROW holds voltage SELECTion and ledtype SELECTion -->
