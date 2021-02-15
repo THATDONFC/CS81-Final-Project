@@ -1,167 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<!-- Required meta tags -->
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Calculator used to determine the power requirements of a digital LED strip">
-<style>html{visibility: hidden;opacity:0;}</style>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-<title>LED Power Calculator</title>
-<link href="css/index.css" rel="stylesheet" type="text/css">
-</head>
-<body onload="setup()">
-<!-- BEGIN Main div container - content -->
-<div class="container-fluid p-md-4">
-  <!-- ROW holds page heading -->
-  <div class="row gx-4">
-    <h1 class="col p-2">Addressable LED Strip Power Calculator</h1>
-  </div>
-  <!-- ROW holds app description and instructions -->
-  <div class="row gx-4">
-    <div class="col-md-8 col-md-9 p-2">
-      <p>Enter the number of LED's and select a voltage and strip type to calculate the AVERAGE and MAXIMUM power required.
-        <span class="d-none d-md-inline">This calculator will also provide you with a recommended power supply rating.</span></p>
-    </div>
-  </div>
-  <!-- BEGIN MAIN FORM - calculator form -->
-  <form method="index.html" action="#" id="main-form">
-    <!-- ROW holds LED COUNT and INPUT -->
-    <div class="row gx-4">
-      <div class="col-sm p-2">
-        <label for="ledCount" class="form-label mb-0">Number of LED's:</label>
-        <div id="ledHelp" class="form-text d-none d-sm-block">Enter the total number of LED's here.</div>
-      </div>
-      <div class="input-group col-sm p-2">
-        <input type="number" class="form-control" id="ledCount" min="1" max="10000" oninput="setLed()" required autofocus>
-        <span class="input-group-text px-2">LED's</span>
-      </div>
-    </div>
-    <!-- ROW holds voltage SELECTion and ledtype SELECTion -->
-    <div class="row gx-4">
-      <div class="input-group col-sm p-2">
-        <label for="voltage" class="input-group-text px-1">Voltage:</label>
-        <select class="form-select" id="voltage" onchange="setV()" required>
-          <option value="5">5V</option>
-          <option value="12">12V</option>
-        </select>
-      </div>
-      <!-- Show 5vled if 5v selected, 12vled if not selected -->
-      <div class="input-group col-sm p-2">
-        <label for="5vled" class="input-group-text px-1">LED Type:</label>
-        <select class="form-select" id="5vled" onchange="setV()" required>
-          <option value="1">WS2812b</option>
-          <option value="2">WS2812b-Eco</option>
-          <option value="3">APA102</option>
-          <option value="4">SK6812</option>
-        </select>
-        <select class="form-select" id="12vled" style="display: none;" onchange="setV()" required>
-          <option value="1">WS2811</option>
-          <option value="2">WS2815</option>
-          <option value="3">GS8208</option>
-          <option value="4">SK6812</option>
-        </select>
-      </div>
-    </div>
-    <!-- ROW holds form SUBMIT and CLEAR BUTTONs -->
-    <div class="row gx-4 mb-2">
-      <div class="d-grid col-sm-6 p-2 order-last order-sm-first">
-        <button class="btn btn-secondary" type="button" id="clear">Clear Form</button>
-      </div>
-      <div class="d-grid col-sm-6 p-2">
-        <button class="btn btn-primary" type="submit" id="calculate">Calculate</button>
-      </div>
-    </div>
-  </form>
-  <!-- END MAIN FORM -->
-  <!-- ROW holds average and total amperage and wattage -->
-  <div class="row gx-4">
-    <!-- COL holds average amperage and wattage -->
-    <div class="col-sm-6 p-2">
-      <h5>Average:</h5>
-      <div class="row">
-        <div class="col-6">
-          <div class="form-floating input-group">
-            <input type="input" class="form-control text-truncate" id="ampsA" placeholder="Average Amperage" value="Average Amperage" disabled>
-            <label for="ampsA">Amperage</label>
-            <span class="input-group-text">A</span>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-floating input-group">
-            <input type="input" class="form-control text-truncate" id="wattsA" placeholder="Average Wattage" value="Average Wattage" disabled>
-            <label for="ampsA">Wattage</label>
-            <span class="input-group-text">W</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- COL holds total amperage and wattage -->
-    <div class="col-sm-6 p-2">
-      <h5>Maximum:</h5>
-      <div class="row">
-        <div class="col-6">
-          <div class="form-floating input-group">
-            <input type="input" class="form-control text-truncate" id="ampsM" placeholder="Maximum Amperage" value="Maximum Amperage" disabled>
-            <label for="ampsM">Amperage</label>
-            <span class="input-group-text">A</span>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-floating input-group">
-            <input type="input" class="form-control text-truncate" id="wattsM" placeholder="Maximum Wattage" value="Maximum Wattage" disabled>
-            <label for="ampsM">Wattage</label>
-            <span class="input-group-text">W</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ROW holds power supply and injection-->
-  <div class="row gx-4">
-    <!-- COL holds power supply -->
-    <div class="col-sm-6 p-2">
-      <p class="h5 text-nowrap">Recommended Power Supply:</p>
-      <div class="row gx-4" id="psRow">
-        <div class="col-sm">
-          <span id="psVolt"></span>
-          <span >@</span>
-          <span id="psAmp"></span>
-          <span id="psWatt"></span>
-        </div>
-      </div>
-    </div>
-    <!-- COL holds power injection -->
-    <div class="col-sm-6 p-2">
-      <p class="h5 text-nowrap">Power Injection:</p>
-      <div class="row">
-        <div class="col-sm">
-          <span>Inject power every</span>
-          <span id="powerInjection"></span>
-          <span>LED's</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ROW holds wire gauge -->
-  <div class="row gx-4">
 
+<head>
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculator used to determine the power requirements of a digital LED strip">
+  <style>
+    html {
+      visibility: hidden;
+      opacity: 0;
+    }
+  </style>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <title>LED Power Calculator</title>
+  <link href="css/index.css" rel="stylesheet" type="text/css">
+</head>
+
+<body onload="setup()">
+  <!-- BEGIN Main div container - content -->
+  <div class="container-fluid p-md-4">
+    <!-- ROW holds page heading -->
+    <div class="row gx-4">
+      <h1 class="col p-2">Addressable LED Strip Power Calculator</h1>
+    </div>
+    <!-- ROW holds app description and instructions -->
+    <div class="row gx-4">
+      <div class="col-md-8 col-md-9 p-2">
+        <p>Enter the number of LED's and select a voltage and strip type to calculate the AVERAGE and MAXIMUM power
+          required.
+          <span class="d-none d-md-inline">This calculator will also provide you with a recommended power supply
+            rating.</span>
+        </p>
+      </div>
+    </div>
+    <!-- BEGIN MAIN FORM - calculator form -->
+    <form method="index.html" action="#" id="main-form">
+      <!-- ROW holds LED COUNT and INPUT -->
+      <div class="row gx-4">
+        <div class="col-sm p-2">
+          <label for="ledCount" class="form-label mb-0">Number of LED's:</label>
+          <div id="ledHelp" class="form-text d-none d-sm-block">Enter the total number of LED's here.</div>
+        </div>
+        <div class="input-group col-sm p-2">
+          <input type="number" class="form-control" id="ledCount" min="1" max="10000" oninput="setLed()" required
+            autofocus>
+          <span class="input-group-text px-2">LED's</span>
+        </div>
+      </div>
+      <!-- ROW holds voltage SELECTion and ledtype SELECTion -->
+      <div class="row gx-4">
+        <div class="input-group col-sm p-2">
+          <label for="voltage" class="input-group-text px-1">Voltage:</label>
+          <select class="form-select" id="voltage" onchange="setV()" required>
+            <option value="5">5V</option>
+            <option value="12">12V</option>
+          </select>
+        </div>
+        <!-- Show 5vled if 5v selected, 12vled if not selected -->
+        <div class="input-group col-sm p-2">
+          <label for="5vled" class="input-group-text px-1">LED Type:</label>
+          <select class="form-select" id="5vled" onchange="setV()" required>
+            <option value="1">WS2812b</option>
+            <option value="2">WS2812b-Eco</option>
+            <option value="3">APA102</option>
+            <option value="4">SK6812</option>
+          </select>
+          <select class="form-select" id="12vled" style="display: none;" onchange="setV()" required>
+            <option value="1">WS2811</option>
+            <option value="2">WS2815</option>
+            <option value="3">GS8208</option>
+            <option value="4">SK6812</option>
+          </select>
+        </div>
+      </div>
+      <!-- ROW holds form SUBMIT and CLEAR BUTTONs -->
+      <div class="row gx-4 mb-2">
+        <div class="d-grid col-sm-6 p-2 order-last order-sm-first">
+          <button class="btn btn-secondary" type="button" id="clear">Clear Form</button>
+        </div>
+        <div class="d-grid col-sm-6 p-2">
+          <button class="btn btn-primary" type="submit" id="calculate">Calculate</button>
+        </div>
+      </div>
+    </form>
+    <!-- END MAIN FORM -->
+    <!-- ROW holds average and total amperage and wattage -->
+    <div class="row gx-4">
+      <!-- COL holds average amperage and wattage -->
+      <div class="col-sm-6 p-2">
+        <h5>Average:</h5>
+        <div class="row">
+          <div class="col-6">
+            <div class="form-floating input-group">
+              <input type="input" class="form-control text-truncate" id="ampsA" placeholder="Average Amperage"
+                value="Average Amperage" disabled>
+              <label for="ampsA">Amperage</label>
+              <span class="input-group-text">A</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-floating input-group">
+              <input type="input" class="form-control text-truncate" id="wattsA" placeholder="Average Wattage"
+                value="Average Wattage" disabled>
+              <label for="ampsA">Wattage</label>
+              <span class="input-group-text">W</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- COL holds total amperage and wattage -->
+      <div class="col-sm-6 p-2">
+        <h5>Maximum:</h5>
+        <div class="row">
+          <div class="col-6">
+            <div class="form-floating input-group">
+              <input type="input" class="form-control text-truncate" id="ampsM" placeholder="Maximum Amperage"
+                value="Maximum Amperage" disabled>
+              <label for="ampsM">Amperage</label>
+              <span class="input-group-text">A</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-floating input-group">
+              <input type="input" class="form-control text-truncate" id="wattsM" placeholder="Maximum Wattage"
+                value="Maximum Wattage" disabled>
+              <label for="ampsM">Wattage</label>
+              <span class="input-group-text">W</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ROW holds power supply and injection-->
+    <div class="row gx-4">
+      <!-- COL holds power supply -->
+      <div class="col-sm-6 p-2">
+        <p class="h5 text-nowrap">Recommended Power Supply:</p>
+        <div class="row gx-4" id="psRow">
+          <div class="col-sm">
+            <span id="psVolt"></span>
+            <span>@</span>
+            <span id="psAmp"></span>
+            <span id="psWatt"></span>
+          </div>
+        </div>
+      </div>
+      <!-- COL holds power injection -->
+      <div class="col-sm-6 p-2">
+        <p class="h5 text-nowrap">Power Injection:</p>
+        <div class="row">
+          <div class="col-sm">
+            <span>Inject power every</span>
+            <span id="powerInjection"></span>
+            <span>LED's</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ROW holds wire gauge -->
+    <div class="row gx-4">
+
+    </div>
+    <!-- ROW holds disclaimer -->
+    <div class="row gx-4">
+      <p class="col-md-8 mt-5">
+        <span class="fst-italic"><strong>Disclaimer:</strong></span> This tool is meant to be a guide only. All values
+        shown here
+        are recommendations. It is up to you to determine what is safe for your specific use case. Please be sure
+        you understand the basics of low voltage LED strips and how to work with them safely before beginning any
+        projects.
+      </p>
+    </div>
   </div>
-  <!-- ROW holds disclaimer -->
-  <div class="row gx-4">
-    <p class="col-md-8 mt-5">
-      <span class="fst-italic"><strong>Disclaimer:</strong></span> This tool is meant to be a guide only. All values shown here
-      are recommendations. It is up to you to determine what is safe for your specific use case. Please be sure
-      you understand the basics of low voltage LED strips and how to work with them safely before beginning any
-      projects.
-    </p>
-  </div>
-</div>
-<!-- END Main div container - content -->
-<!-- Source custom JavaScript from js/index.js -->
-<script src="js/index.js"></script>
-<!-- Bootstrap JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+  <!-- END Main div container - content -->
+  <!-- Source custom JavaScript from js/index.js -->
+  <script src="js/index.js"></script>
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"
+    integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>
