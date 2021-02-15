@@ -22,11 +22,11 @@ const psWatt = d.getElementById("psWatt");
 
 // Variable declarations
 var ledCount = 0;
+var selectedV;
 var is5volt;
 var stripType;
 var maxAmp, avgAmp, maxWatt, avgWatt;
 var submitted;
-var selectedV;
 
 // Error handling
 class InputError extends Error {}
@@ -34,10 +34,10 @@ class InputError extends Error {}
 /** Called on body load to initialize the form */
 function setup() {
   setV();setPI();setPS();submitted=false;
-  enCalc(false);enClear(false);
+  enButtons(false);
 }
 
-/** Set Voltage functions selects 5V or 12V based on input from user */
+/** Set Voltage function - selects 5V or 12V based on input from user */
 function setV() {
   is5volt = (v.value === "5");
   stripType = (is5volt) ? led5vForm.value : led12vForm.value;
@@ -46,45 +46,14 @@ function setV() {
   selectedV = v.value;
 }
 
-/**
- * Called on form.submit - calculates max and avg power
- *   and prints the values to the screen. Suggests a power supply
- *   and power injection points.
- */
-function submitForm() {
-  calculate(ledCount, v.value, stripType);
-  avgAmpForm.value = avgAmp;
-  maxAmpForm.value = maxAmp;
-  avgWattForm.value = avgWatt;
-  maxWattForm.value = maxWatt;
-  setPS(selectedV, maxAmp, maxWatt, false);
-  submitted = true;
-  avgAmp=0;maxAmp=0;avgWatt=0;maxWatt=0;
+/** Set initial Power Injection values */
+function setPI() {
+  const basePI = ("150");
+  d.getElementById("powerInjection").innerHTML = basePI;
 }
 
-// Prevent page from reloading on submit
-form.addEventListener("submit", event => {
-  submitForm();
-  event.preventDefault();
-});
-
-/** Called on "CLEAR" clicked, resets form and text values */
-function clearForm() {
-  setPI();setPS();form.reset();
-  avgAmpForm.value = avgAmpForm.defaultValue;
-  avgWattForm.value = avgWattForm.defaultValue;
-  maxAmpForm.value = maxAmpForm.defaultValue;
-  maxWattForm.value = maxWattForm.defaultValue;
-  submitted=false;
-}
-
-clearButton.addEventListener("click", () => {
-  clearForm();
-  enButtons(false);
-});
-
 /**
- * Set Power Supply values based on the state of init and prints them to the screen
+ * Set Power Supply values based on the state of init and print them to the screen
  * @param volt int representing strip voltage - selected by the user
  * @param amp  float representing MAXimum required AMPS
  * @param watt float representing MAXimum required WATTS
@@ -107,15 +76,47 @@ function setPS(volt, amp, watt, init = true) {
   }
 }
 
-/** Set initial Power Injection values */
-function setPI() {
-  const basePI = ("150");
-  d.getElementById("powerInjection").innerHTML = basePI;
+/**
+ * Called on form.submit - calculates max and avg power
+ *   and prints the values to the screen. Suggests a power supply
+ *   and power injection points.
+ */
+function submitForm() {
+  calculate(ledCount, v.value, stripType);
+  avgAmpForm.value = avgAmp;
+  maxAmpForm.value = maxAmp;
+  avgWattForm.value = avgWatt;
+  maxWattForm.value = maxWatt;
+  setPS(selectedV, maxAmp, maxWatt, false);
+  submitted = true;
+  avgAmp=0;maxAmp=0;avgWatt=0;maxWatt=0;
 }
+
+/** Prevent page from reloading on submit */
+form.addEventListener("submit", event => {
+  submitForm();
+  event.preventDefault();
+});
+
+/** Called on "CLEAR" clicked, resets form and text values */
+function clearForm() {
+  setPI();setPS();form.reset();
+  avgAmpForm.value = avgAmpForm.defaultValue;
+  avgWattForm.value = avgWattForm.defaultValue;
+  maxAmpForm.value = maxAmpForm.defaultValue;
+  maxWattForm.value = maxWattForm.defaultValue;
+  submitted=false;
+}
+
+clearButton.addEventListener("click", () => {
+  clearForm();
+  enButtons(false);
+});
 
 /** Set the variable ledCount to the value entered by the user */
 function setLed() {
-  if (count.value.length < 1) {
+  if (count.value.length < 1) { // if input ledCount is deleted disable buttons
+    if (!submitted) enClear(false);
     enCalc(false);
     return;
   }
@@ -123,24 +124,29 @@ function setLed() {
     let isNumber = !isNaN(parseInt(count.value)); // check if input is a number
     if (isNumber) {
       ledCount = parseInt(count.value); // change the string to int
-      enButtons(true);
+      enButtons(true);                  // enable buttons on valid input
     } else {
       throw new InputError(count.value + " is not a number!"); // input is not a number
     }
   } catch (e) {
-    if (e instanceof InputError) { // input is not a number
-      console.error("Not a valid number!"); // show error somehow
-    } else { // some other error
-      throw e;
+    if (e instanceof InputError) {      // input is not a number
+      console.error("Not a valid number!");
+    } else {
+      throw e; // some other exception
     }
   }
 }
 
-/** prevent ALL non-number values from being input */
-count.addEventListener("keydown", event => {
+/**
+ * prevent ALL non-number values from being input
+ *   For a "number" input in an HTML form,
+ *   the values 'e', 'E', '-', '+', and '.' are accepted
+ *   as they are technically part of some numbers
+ */
+count.addEventListener("keydown", e => {
   var invalidChars = ["-", "+", "e", "E", "."];
-  if (invalidChars.includes(event.key)) {
-    event.preventDefault();
+  if (invalidChars.includes(e.key)) {
+    e.preventDefault();
   }
 });
 
@@ -165,7 +171,10 @@ function calculate(lc, v, t) {
   enCalc(false);
 }
 
-/** Enables all buttons if select tags change and ledCount is not empty */
+/**
+ * Enables all buttons if select tags change and ledCount is not empty
+ * @param e event object passed by event listener
+ */
 function selectChange(e) {
   if (count.value.length > 1) {
     if (e.target.nodeName == "SELECT") {
@@ -173,7 +182,6 @@ function selectChange(e) {
     }
   }
 }
-
 form.addEventListener("change", e => {
   selectChange(e);
 });
@@ -201,7 +209,7 @@ function testForm() {
   }
 }
 
-// LED STRIP OBJECTS
+/** LED STRIP OBJECTS */
 const strip5v = {
   1: {
     type: "WS2812b",

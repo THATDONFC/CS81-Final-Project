@@ -8,27 +8,29 @@
 <style>html{visibility: hidden;opacity:0;}</style>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 <title>LED Power Calculator</title>
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="css/index.css" rel="stylesheet" type="text/css">
 </head>
 <body onload="setup()">
 <!-- BEGIN Main div container - content -->
-<div class="container-fluid px-md-4">
+<div class="container-fluid p-md-4">
   <!-- ROW holds page heading -->
   <div class="row gx-4">
-    <h1 class="col card-title p-2">Addressable LED Strip Power Calculator</h1>
+    <h1 class="col p-2">Addressable LED Strip Power Calculator</h1>
   </div>
   <!-- ROW holds app description and instructions -->
   <div class="row gx-4">
-    <div class="col-md-8 col-sm-9 p-2">
-      <p>This calculator will take your total number of LED's and selected voltage and calculate the TOTAL and AVERAGE
-        amperage and wattage required.
-      </p>
+    <div class="col-md-8 col-md-9 p-2">
+      <p>Enter the number of LED's and select a voltage and strip type to calculate the AVERAGE and MAXIMUM power required.
+        <span class="d-none d-md-inline">This calculator will also provide you with a recommended power supply rating.</span></p>
     </div>
   </div>
   <!-- BEGIN MAIN FORM - calculator form -->
   <form method="index.html" action="#" id="main-form">
+    <!-- Not enough time to implement this functionality. I'll come back to this after the assignment is submitted -->
+    <div class="row gx-4 h-auto p-2" style="display: none;">
+      <input type="checkbox" class="d-flex">Check here if you would like to calculate by number of strips instead
+    </div>
     <!-- ROW holds LED COUNT and INPUT -->
     <div class="row gx-4">
       <div class="col-sm p-2">
@@ -38,6 +40,30 @@
       <div class="input-group col-sm p-2">
         <input type="number" class="form-control" id="ledCount" min="1" max="10000" oninput="setLed()" required autofocus>
         <span class="input-group-text px-2">LED's</span>
+      </div>
+    </div>
+    <!-- Not enough time to implement this functionality. I'll come back to this after the assignment is submitted -->
+    <!-- ROW holds stripCount and stripDensity -->
+    <div class="row gx-4" style="display: none;">
+      <div class="col-sm p-2">
+        <label for="stripCount" class="form-label mb-0">Number of Strips:</label>
+        <div id="stripHelp" class="form-text d-none d-sm-block">Enter the total number of 5 meter LED strips here.</div>
+      </div>
+      <div class="col-sm-6 p-2">
+        <div class="row">
+          <div class="col-6">
+          <div class="input-group">
+            <input type="number" class="form-control" id="stripCount" min="1" max="100" oninput="setStrip()" required>
+            <span class="input-group-text px-2">Strips</span>
+          </div>
+          </div>
+          <div class="col-6">
+          <div class="input-group">
+            <input type="number" class="form-control" id="stripDensity" min="1" max="100" oninput="setStrip()" required>
+            <span class="input-group-text px-2">LEDs/m</span>
+          </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- ROW holds voltage SELECTion and ledtype SELECTion -->
@@ -126,7 +152,7 @@
     <div class="col-sm-6 p-2">
       <p class="h5 text-nowrap">Recommended Power Supply:</p>
       <div class="row gx-4">
-        <div class="col-sm h7">
+        <div class="col-sm">
           <span id="psVolt"></span>
           <span >@</span>
           <span id="psAmp"></span>
@@ -138,7 +164,7 @@
     <div class="col-sm-6 p-2">
       <p class="h5 text-nowrap">Power Injection:</p>
       <div class="row">
-        <div class="col-sm h7">
+        <div class="col-sm">
           <span>Inject power every</span>
           <span id="powerInjection"></span>
           <span>LED's</span>
@@ -153,7 +179,7 @@
   <!-- ROW holds disclaimer -->
   <div class="row gx-4">
     <p class="col-md-8 mt-5">
-      <span class="fst-italic">Disclaimer:</span> This tool is meant to be a guide only. All values shown here
+      <span class="fst-italic"><strong>Disclaimer:</strong></span> This tool is meant to be a guide only. All values shown here
       are recommendations. It is up to you to determine what is safe for your specific use case. Please be sure
       you understand the basics of low voltage LED strips and how to work with them safely before beginning any
       projects.
@@ -163,7 +189,7 @@
 <!-- END Main div container - content -->
 <!-- Source custom JavaScript from js/index.js -->
 <script src="js/index.js"></script>
-<!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
 </body>
 </html>
